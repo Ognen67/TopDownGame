@@ -291,7 +291,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 834980407}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.057, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1532542820}
@@ -432,7 +432,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00435479, y: -0.026129127}
+  m_Offset: {x: -0.00435479, y: -0.03487061}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -443,7 +443,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.18806413, y: 0.23677382}
+  m_Size: {x: 0.18806413, y: 0.25425678}
   m_EdgeRadius: 0
 --- !u!212 &1407347210
 SpriteRenderer:
@@ -504,7 +504,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1407347207}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.4, y: 0, z: -3.221}
+  m_LocalPosition: {x: -2.17, y: 0, z: -3.221}
   m_LocalScale: {x: 2.2714, y: 2.2714, z: 2.2714}
   m_Children: []
   m_Father: {fileID: 0}
@@ -522,8 +522,8 @@ GameObject:
   - component: {fileID: 1532542819}
   - component: {fileID: 1532542818}
   - component: {fileID: 1532542817}
-  - component: {fileID: 1532542821}
   - component: {fileID: 1532542822}
+  - component: {fileID: 1532542821}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -543,7 +543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ec86bbee1fe974ab4cf2978b6ec04b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
+  moveSpeed: 6
   rb: {fileID: 1532542818}
 --- !u!50 &1532542818
 Rigidbody2D:
@@ -625,15 +625,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532542816}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.45, y: -0.71, z: 0}
+  m_LocalPosition: {x: -1.337, y: -0.71, z: 0}
   m_LocalScale: {x: 4.1421, y: 4.1421, z: 4.1421}
   m_Children:
   - {fileID: 834980408}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &1532542821
-PolygonCollider2D:
+--- !u!61 &1532542821
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -645,7 +645,7 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0019174404, y: -0.04026597}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -655,16 +655,9 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.04, y: 0.099999994}
-      - {x: -0.08, y: 0.049999997}
-      - {x: -0.08, y: -0.14999999}
-      - {x: -0.06, y: -0.16}
-      - {x: 0.049999997, y: -0.16}
-      - {x: 0.07, y: -0.13}
-      - {x: 0.08, y: -0.089999996}
-      - {x: 0.08, y: 0.099999994}
+  serializedVersion: 2
+  m_Size: {x: 0.120587654, y: 0.20111959}
+  m_EdgeRadius: 0
 --- !u!114 &1532542822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,6 +686,7 @@ GameObject:
   - component: {fileID: 1774170087}
   - component: {fileID: 1774170086}
   - component: {fileID: 1774170085}
+  - component: {fileID: 1774170088}
   m_Layer: 0
   m_Name: mole-idle-front
   m_TagString: Untagged
@@ -785,12 +779,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1774170084}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.09, y: 0, z: 0}
+  m_LocalPosition: {x: 5.14, y: -2.79, z: 0}
   m_LocalScale: {x: 3.0307336, y: 3.0307336, z: 3.0307336}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1774170088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774170084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cbd9daca28a0594daf9fa9331907515, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
 --- !u!1 &1937738665
 GameObject:
   m_ObjectHideFlags: 0

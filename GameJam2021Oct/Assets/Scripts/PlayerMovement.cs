@@ -79,8 +79,6 @@ public class PlayerMovement : MonoBehaviour
                 if (minThrowDistance >= throwCap)
                 {
                     throwDistance = minThrowDistance;
-                    Debug.Log("ThrowDistance: " + throwDistance);
-                    Debug.Log("ItemHolding: " + itemHolding);
 
                     StartCoroutine(ThrowItem(itemHolding));
                     itemHolding = null;
@@ -88,8 +86,6 @@ public class PlayerMovement : MonoBehaviour
             }
             if (Input.GetKeyUp(KeyCode.Q))
             {
-                Debug.Log("ThrowDistance: " + throwDistance);
-                Debug.Log("ItemHolding: " + itemHolding);
                 StartCoroutine(ThrowItem(itemHolding));
                 itemHolding = null;
             }

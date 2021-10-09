@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
     public Rigidbody2D rb;
     Vector2 movement;
+    private Animator animator;
 
     public Transform holdSpot;
     public LayerMask pickUpMask;
@@ -17,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 Direction { get; set; }
 
     private GameObject itemHolding;
-    private float minThrowDistance = 2f;
+    private float minThrowDistance = 0.2f;
     public float throwDistance = 2f;
     public float throwCap = 8f;
 
@@ -29,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         transform = gameObject.GetComponent<Transform>();
         Direction = new Vector2(0, 1);
     }
@@ -46,6 +48,9 @@ public class PlayerMovement : MonoBehaviour
         if (itemHolding)
         {
             moveSpeed = 5;
+            animator.SetFloat("Horizontal", movement.x);
+            animator.SetFloat("Vertical", movement.y);
+            animator.SetFloat("Speed", movement.sqrMagnitude);
         }
         else
         {
@@ -80,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Q))
             {
-                minThrowDistance += Time.deltaTime * 2;
+                minThrowDistance += Time.deltaTime * (float)2.5;
                 throwDistance = minThrowDistance;
                 if (minThrowDistance >= throwCap)
                 {
@@ -111,15 +116,18 @@ public class PlayerMovement : MonoBehaviour
             Debug.DrawRay(obstacleRayObject.transform.position, Direction * obstacleRayDistance, Color.green);
             throwCap = 8f;
         }
-
-        
-
     }
 
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + movement * moveSpeed * Time.deltaTime);
     }
+
+    public void asd()
+    {
+        Debug.Log("asd");
+    }
+
 
     IEnumerator ThrowItem(GameObject item)
     {
@@ -133,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (item.GetComponent<Rigidbody2D>())
             item.GetComponent<Rigidbody2D>().simulated = true;
-        minThrowDistance = 2f;
+        minThrowDistance = 0.2f;
     }
 
 }

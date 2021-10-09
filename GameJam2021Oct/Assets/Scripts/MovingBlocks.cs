@@ -12,7 +12,6 @@ public class MovingBlocks : MonoBehaviour
     public bool upDown = false;
 
     private SpriteRenderer spriteRenderer;
-    
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();

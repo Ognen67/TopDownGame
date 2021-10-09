@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
     // Pick Up
     private PickUp pickUp;
     private GameObject lantern;
+    PickUp pickUpScript;
+
+    public Text throwDistanceIndicator;
 
     private void Start()
     {
@@ -22,8 +26,7 @@ public class PlayerMovement : MonoBehaviour
         pickUp = gameObject.GetComponent<PickUp>();
         pickUp.Direction = new Vector2(0, 1);
     }
-
-
+    
     void Update()
     {
         movement.x = Input.GetAxisRaw("Horizontal");
@@ -42,15 +45,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void retrieveLantern()
     {
-        lantern.transform.position = new Vector2(transform.position.x, transform.position.y);
-        Debug.Log(transform.position);
-        Debug.Log(lantern.transform.position);
+        lantern.transform.position = new Vector2(pickUp.holdSpot.transform.position.x, pickUp.holdSpot.transform.position.y);
+             
+        pickUp.equipLantern();
     }
 
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + movement * moveSpeed * Time.deltaTime);
+    }
 
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if(other.gameObject.tag == "Enemy")
+        {
+            Destroy(other.gameObject);
+        }
     }
 }
 

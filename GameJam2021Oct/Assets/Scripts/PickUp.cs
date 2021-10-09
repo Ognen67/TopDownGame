@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +10,11 @@ public class PickUp : MonoBehaviour
     public Vector3 Direction { get; set; }
     public PlayerMovement playerMovement;
     public float throwDistance = 2f;
+    public float throwCap = 8f;
 
     private GameObject itemHolding;
-    private float timer = 2f;
+    private float minThrowDistance = 2f;
+
     void Update()
     {
         if (itemHolding)
@@ -43,6 +46,7 @@ public class PickUp : MonoBehaviour
                     itemHolding.transform.parent = transform;
                     if (itemHolding.GetComponent<Rigidbody2D>())
                         itemHolding.GetComponent<Rigidbody2D>().simulated = false;
+                    Debug.Log("Lantern Picked Up");
                 }
             }
         }
@@ -50,17 +54,34 @@ public class PickUp : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Q))
             {
-                timer += Time.deltaTime;
-                Debug.Log("Timer: " + timer);
+                minThrowDistance += Time.deltaTime * 2;
+                if (minThrowDistance >= throwCap)
+                {
+                    throwDistance = minThrowDistance;
+                    Debug.Log("ThrowDistance: " + throwDistance);
+
+                    StartCoroutine(ThrowItem(itemHolding));
+                    itemHolding = null;
+                }
             }
             if (Input.GetKeyUp(KeyCode.Q))
             {
-                throwDistance = timer;
+                throwDistance = minThrowDistance;
                 Debug.Log("ThrowDistance: " + throwDistance);
 
                 StartCoroutine(ThrowItem(itemHolding));
                 itemHolding = null;
             }
+        }
+    }
+
+    public void equipLantern()
+    {
+        Collider2D pickUpItem = Physics2D.OverlapCircle(transform.position + Direction, .4f, pickUpMask);
+        if (pickUpItem)
+        {
+            itemHolding = pickUpItem.gameObject;
+            Debug.Log("Lantern Picked Up");
         }
     }
 
@@ -76,7 +97,7 @@ public class PickUp : MonoBehaviour
         }
         if (item.GetComponent<Rigidbody2D>())
             item.GetComponent<Rigidbody2D>().simulated = true;
-        timer = 2f;
+        minThrowDistance = 2f;
     }
 
 }

@@ -48,6 +48,37 @@ public class PlayerCollisions : MonoBehaviour
         {
             Destroy(other.gameObject);
         }
+
+        if (other.gameObject.tag == "Box")
+        {
+            // get the direction of the collision
+            Vector3 direction = transform.position - other.gameObject.transform.position;
+            // see if the obect is futher left/right or up down
+            Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
+
+            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+            {
+                if (direction.x > 0) 
+                {
+                    Debug.Log("collision is to the right"); 
+                    
+                }
+                else {
+                    Debug.Log("collision is to the left");
+                }
+            }
+            else
+            {
+                if (direction.y > 0) 
+                {
+                    Debug.Log("collision is up");
+                }
+                else
+                {
+                    Debug.Log("collision is down");
+                }
+            }
+        }
     }
 
 

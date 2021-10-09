@@ -10,21 +10,21 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
     public Rigidbody2D rb;
     Vector2 movement;
+
+    public Transform holdSpot;
+    public LayerMask pickUpMask;
     private Transform transform;
+    public Vector3 Direction { get; set; }
 
-    // Pick Up
-    private PickUp pickUp;
-    private GameObject lantern;
-    PickUp pickUpScript;
-
-    public Text throwDistanceIndicator;
+    private GameObject itemHolding;
+    private float minThrowDistance = 2f;
+    public float throwDistance = 2f;
+    public float throwCap = 8f;
 
     private void Start()
     {
-        lantern = GameObject.FindGameObjectWithTag("Lantern");
         transform = gameObject.GetComponent<Transform>();
-        pickUp = gameObject.GetComponent<PickUp>();
-        pickUp.Direction = new Vector2(0, 1);
+        Direction = new Vector2(0, 1);
     }
     
     void Update()
@@ -34,20 +34,62 @@ public class PlayerMovement : MonoBehaviour
 
         if (movement.sqrMagnitude > .1f)
         {
-            pickUp.Direction = movement.normalized;
+            Direction = movement.normalized;
         }
 
+        if (itemHolding)
+        {
+            moveSpeed = 5;
+        }
+        else
+        {
+            moveSpeed = 0;
+        }
+
+        // Get Lantern
         if (Input.GetKeyDown(KeyCode.R))
         {
-            retrieveLantern();
+            if (itemHolding)
+            {
+                itemHolding.transform.position = transform.position + Direction;
+                itemHolding.transform.parent = null;
+                if (itemHolding.GetComponent<Rigidbody2D>())
+                    itemHolding.GetComponent<Rigidbody2D>().simulated = true;
+                itemHolding = null;
+            }
+            else
+            {
+                Collider2D pickUpItem = Physics2D.OverlapCircle(transform.position + Direction, float.PositiveInfinity, pickUpMask);
+                if (pickUpItem)
+                {
+                    itemHolding = pickUpItem.gameObject;
+                    itemHolding.transform.position = holdSpot.position;
+                    itemHolding.transform.parent = transform;
+                    if (itemHolding.GetComponent<Rigidbody2D>())
+                        itemHolding.GetComponent<Rigidbody2D>().simulated = false;
+                }
+            }
         }
-    }
+        if (itemHolding)
+        {
+            if (Input.GetKey(KeyCode.Q))
+            {
+                minThrowDistance += Time.deltaTime * 2;
+                throwDistance = minThrowDistance;
+                if (minThrowDistance >= throwCap)
+                {
+                    throwDistance = minThrowDistance;
 
-    private void retrieveLantern()
-    {
-        lantern.transform.position = new Vector2(pickUp.holdSpot.transform.position.x, pickUp.holdSpot.transform.position.y);
-             
-        pickUp.equipLantern();
+                    StartCoroutine(ThrowItem(itemHolding));
+                    itemHolding = null;
+                }
+            }
+            if (Input.GetKeyUp(KeyCode.Q))
+            {
+                StartCoroutine(ThrowItem(itemHolding));
+                itemHolding = null;
+            }
+        }
     }
 
     void FixedUpdate()
@@ -55,12 +97,20 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(rb.position + movement * moveSpeed * Time.deltaTime);
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    IEnumerator ThrowItem(GameObject item)
     {
-        if(other.gameObject.tag == "Enemy")
+        Vector3 startPoint = item.transform.position;
+        Vector3 endPoint = transform.position + Direction * throwDistance;
+        item.transform.parent = null;
+        for (int i = 0; i < 25; i++)
         {
-            Destroy(other.gameObject);
+            item.transform.position = Vector3.Lerp(startPoint, endPoint, i * 4f);
+            yield return null;
         }
+        if (item.GetComponent<Rigidbody2D>())
+            item.GetComponent<Rigidbody2D>().simulated = true;
+        minThrowDistance = 2f;
     }
+
 }
 

@@ -8,14 +8,31 @@ public class PickUp : MonoBehaviour
     public LayerMask pickUpMask;
     public GameObject destroyEffect;
     public Vector3 Direction { get; set; }
+    public PlayerMovement playerMovement;
+    private bool slow = false;
+
     private GameObject itemHolding;
+    
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (slow)
         {
+            playerMovement.moveSpeed = 1;
+            Debug.Log("Slow true");
+        }
+        if (!slow)
+        {
+            playerMovement.moveSpeed = 5;
+            Debug.Log("Slow false");
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {          
             if (itemHolding)
             {
+                slow = false;
+                Debug.Log("Slow true");
                 itemHolding.transform.position = transform.position + Direction;
                 itemHolding.transform.parent = null;
                 if (itemHolding.GetComponent<Rigidbody2D>())
@@ -24,6 +41,7 @@ public class PickUp : MonoBehaviour
             }
             else
             {
+                slow = true;
                 Collider2D pickUpItem = Physics2D.OverlapCircle(transform.position + Direction, .4f, pickUpMask);
                 if (pickUpItem)
                 {
@@ -34,7 +52,6 @@ public class PickUp : MonoBehaviour
                         itemHolding.GetComponent<Rigidbody2D>().simulated = false;
                 }
             }
-
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -42,6 +59,7 @@ public class PickUp : MonoBehaviour
             {
                 StartCoroutine(ThrowItem(itemHolding));
                 itemHolding = null;
+                slow = false;
             }
         }
     }

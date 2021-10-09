@@ -8,22 +8,13 @@ public class PickUp : MonoBehaviour
     public LayerMask pickUpMask;
     public Vector3 Direction { get; set; }
     public PlayerMovement playerMovement;
-    private bool immobilized = true;
+    public float throwDistance = 2f;
 
     private GameObject itemHolding;
-    
-
+    private float timer = 2f;
     void Update()
     {
-        /*if (immobilized)
-        {
-            playerMovement.moveSpeed = 0;
-        }
-        else
-        {
-            playerMovement.moveSpeed = 5;
-        }*/
-        if(itemHolding)
+        if (itemHolding)
         {
             playerMovement.moveSpeed = 5;
         }
@@ -33,19 +24,17 @@ public class PickUp : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.E))
-        {          
+        {
             if (itemHolding)
-            { 
+            {
                 itemHolding.transform.position = transform.position + Direction;
                 itemHolding.transform.parent = null;
                 if (itemHolding.GetComponent<Rigidbody2D>())
                     itemHolding.GetComponent<Rigidbody2D>().simulated = true;
                 itemHolding = null;
-                immobilized = true;
             }
             else
             {
-                immobilized = false;
                 Collider2D pickUpItem = Physics2D.OverlapCircle(transform.position + Direction, .4f, pickUpMask);
                 if (pickUpItem)
                 {
@@ -57,17 +46,20 @@ public class PickUp : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (itemHolding)
         {
-            if (itemHolding)
+            if (Input.GetKey(KeyCode.Q))
             {
+                timer += Time.deltaTime;
+                Debug.Log("Timer: " + timer);
+            }
+            if (Input.GetKeyUp(KeyCode.Q))
+            {
+                throwDistance = timer;
+                Debug.Log("ThrowDistance: " + throwDistance);
+
                 StartCoroutine(ThrowItem(itemHolding));
                 itemHolding = null;
-                immobilized = true;
-            }
-            else
-            {
-                immobilized = false;
             }
         }
     }
@@ -75,15 +67,16 @@ public class PickUp : MonoBehaviour
     IEnumerator ThrowItem(GameObject item)
     {
         Vector3 startPoint = item.transform.position;
-        Vector3 endPoint = transform.position + Direction * 2;
+        Vector3 endPoint = transform.position + Direction * throwDistance;
         item.transform.parent = null;
         for (int i = 0; i < 25; i++)
         {
-            item.transform.position = Vector3.Lerp(startPoint, endPoint, i * .04f);
+            item.transform.position = Vector3.Lerp(startPoint, endPoint, i * 4f);
             yield return null;
         }
         if (item.GetComponent<Rigidbody2D>())
             item.GetComponent<Rigidbody2D>().simulated = true;
+        timer = 2f;
     }
 
 }

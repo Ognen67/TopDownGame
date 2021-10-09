@@ -13,10 +13,11 @@ public class PlayerMovement : MonoBehaviour
 
     // Pick Up
     private PickUp pickUp;
-    public GameObject lantern;
+    private GameObject lantern;
 
     private void Start()
     {
+        lantern = GameObject.FindGameObjectWithTag("Lantern");
         transform = gameObject.GetComponent<Transform>();
         pickUp = gameObject.GetComponent<PickUp>();
         pickUp.Direction = new Vector2(0, 1);

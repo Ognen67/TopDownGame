@@ -8,13 +8,13 @@ public class KeyScript : MonoBehaviour
     
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Key")
+        if(other.gameObject.tag == "Key")
         {
             Destroy(other.gameObject);
             keys++;
         }
 
-        if(other.tag == "KeyDoor")
+        if(other.gameObject.tag == "KeyDoor")
         {
             if (keys > 0)
             {

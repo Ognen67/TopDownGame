@@ -6,42 +6,46 @@ public class PickUp : MonoBehaviour
 {
     public Transform holdSpot;
     public LayerMask pickUpMask;
-    public GameObject destroyEffect;
     public Vector3 Direction { get; set; }
     public PlayerMovement playerMovement;
-    private bool slow = false;
+    private bool immobilized = true;
 
     private GameObject itemHolding;
     
 
     void Update()
     {
-        if (slow)
+        /*if (immobilized)
         {
-            playerMovement.moveSpeed = 1;
-            Debug.Log("Slow true");
+            playerMovement.moveSpeed = 0;
         }
-        if (!slow)
+        else
         {
             playerMovement.moveSpeed = 5;
-            Debug.Log("Slow false");
+        }*/
+        if(itemHolding)
+        {
+            playerMovement.moveSpeed = 5;
+        }
+        else
+        {
+            playerMovement.moveSpeed = 0;
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {          
             if (itemHolding)
-            {
-                slow = false;
-                Debug.Log("Slow true");
+            { 
                 itemHolding.transform.position = transform.position + Direction;
                 itemHolding.transform.parent = null;
                 if (itemHolding.GetComponent<Rigidbody2D>())
                     itemHolding.GetComponent<Rigidbody2D>().simulated = true;
                 itemHolding = null;
+                immobilized = true;
             }
             else
             {
-                slow = true;
+                immobilized = false;
                 Collider2D pickUpItem = Physics2D.OverlapCircle(transform.position + Direction, .4f, pickUpMask);
                 if (pickUpItem)
                 {
@@ -59,7 +63,11 @@ public class PickUp : MonoBehaviour
             {
                 StartCoroutine(ThrowItem(itemHolding));
                 itemHolding = null;
-                slow = false;
+                immobilized = true;
+            }
+            else
+            {
+                immobilized = false;
             }
         }
     }
@@ -76,8 +84,6 @@ public class PickUp : MonoBehaviour
         }
         if (item.GetComponent<Rigidbody2D>())
             item.GetComponent<Rigidbody2D>().simulated = true;
-        Instantiate(destroyEffect, item.transform.position, Quaternion.identity);
-        Destroy(item);
     }
 
 }

@@ -1,4 +1,5 @@
- using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,12 +9,15 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
     public Rigidbody2D rb;
     Vector2 movement;
+    private Transform transform;
 
     // Pick Up
     private PickUp pickUp;
+    public GameObject lantern;
 
     private void Start()
     {
+        transform = gameObject.GetComponent<Transform>();
         pickUp = gameObject.GetComponent<PickUp>();
         pickUp.Direction = new Vector2(0, 1);
     }
@@ -21,14 +25,25 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
-        if(movement.sqrMagnitude > .1f)
+        if (movement.sqrMagnitude > .1f)
         {
             pickUp.Direction = movement.normalized;
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            retrieveLantern();
+        }
+    }
+
+    private void retrieveLantern()
+    {
+        lantern.transform.position = new Vector2(transform.position.x, transform.position.y);
+        Debug.Log(transform.position);
+        Debug.Log(lantern.transform.position);
     }
 
     void FixedUpdate()
@@ -37,3 +52,4 @@ public class PlayerMovement : MonoBehaviour
 
     }
 }
+

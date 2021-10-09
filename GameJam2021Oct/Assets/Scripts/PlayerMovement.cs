@@ -24,6 +24,12 @@ public class PlayerMovement : MonoBehaviour
     public float throwDistance = 2f;
     public float throwCap = 8f;
 
+    // Raycast
+    [SerializeField] float obstacleRayDistance;
+
+    public GameObject obstacleRayObject;
+    public LayerMask layerMask;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -99,6 +105,24 @@ public class PlayerMovement : MonoBehaviour
                 itemHolding = null;
             }
         }
+       
+        RaycastHit2D hitObstacle = Physics2D.Raycast(obstacleRayObject.transform.position, new Vector3(Direction.x, Direction.y, Direction.z), obstacleRayDistance, layerMask);
+
+        if (hitObstacle.collider != null)
+        {
+            Debug.DrawRay(obstacleRayObject.transform.position, Direction * hitObstacle.distance, Color.red);
+            Debug.Log("Wall Detected");
+            Debug.Log(hitObstacle.distance);
+            throwCap = hitObstacle.distance;
+        }
+        else
+        {
+            Debug.DrawRay(obstacleRayObject.transform.position, Direction * obstacleRayDistance, Color.green);
+            throwCap = 8f;
+        }
+
+        
+
     }
 
     void FixedUpdate()

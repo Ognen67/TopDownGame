@@ -4,7 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< Updated upstream
   - Lantern
+=======
+  - pushable
+  - pushableDown
+  - pushableUp
+  - pushableLeft
+  - pushableRight
+>>>>>>> Stashed changes
   layers:
   - Default
   - TransparentFX

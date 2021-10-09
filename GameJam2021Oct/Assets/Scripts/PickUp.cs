@@ -14,10 +14,16 @@ public class PickUp : MonoBehaviour
 
     private GameObject itemHolding;
     private float minThrowDistance = 2f;
+    
+
+    private void Start()
+    {
+        
+    }
 
     void Update()
     {
-        if (itemHolding)
+        /*if (itemHolding)
         {
             playerMovement.moveSpeed = 5;
         }
@@ -46,10 +52,11 @@ public class PickUp : MonoBehaviour
                     itemHolding.transform.parent = transform;
                     if (itemHolding.GetComponent<Rigidbody2D>())
                         itemHolding.GetComponent<Rigidbody2D>().simulated = false;
-                    Debug.Log("Lantern Picked Up");
+                    Debug.Log("Lantern Picked Up" + itemHolding);
                 }
             }
         }
+        
         if (itemHolding)
         {
             if (Input.GetKey(KeyCode.Q))
@@ -73,8 +80,9 @@ public class PickUp : MonoBehaviour
                 itemHolding = null;
             }
         }
+        */
     }
-
+    /*
     public void equipLantern()
     {
         Collider2D pickUpItem = Physics2D.OverlapCircle(transform.position + Direction, .4f, pickUpMask);
@@ -98,6 +106,6 @@ public class PickUp : MonoBehaviour
         if (item.GetComponent<Rigidbody2D>())
             item.GetComponent<Rigidbody2D>().simulated = true;
         minThrowDistance = 2f;
-    }
+    }*/
 
 }

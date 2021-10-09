@@ -9,7 +9,7 @@ public class PickUp : MonoBehaviour
     public Vector3 Direction { get; set; }
     public PlayerMovement playerMovement;
     public float throwDistance = 2f;
-
+    
     private GameObject itemHolding;
     private float timer = 2f;
     void Update()
@@ -50,8 +50,16 @@ public class PickUp : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Q))
             {
-                timer += Time.deltaTime;
+                timer += Time.deltaTime * 2;
                 Debug.Log("Timer: " + timer);
+                if (timer >= 8f)
+                {
+                    throwDistance = timer;
+                    Debug.Log("ThrowDistance: " + throwDistance);
+
+                    StartCoroutine(ThrowItem(itemHolding));
+                    itemHolding = null;
+                }
             }
             if (Input.GetKeyUp(KeyCode.Q))
             {

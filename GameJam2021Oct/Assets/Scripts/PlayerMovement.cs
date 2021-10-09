@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
+            Debug.Log(rb.constraints);
             retrieveLantern();
         }
     }

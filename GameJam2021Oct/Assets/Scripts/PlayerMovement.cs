@@ -10,6 +10,9 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
     public Rigidbody2D rb;
     Vector2 movement;
+    private Animator animator;
+
+    
 
     public Transform holdSpot;
     public LayerMask pickUpMask;
@@ -29,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         transform = gameObject.GetComponent<Transform>();
         Direction = new Vector2(0, 1);
     }
@@ -43,9 +47,14 @@ public class PlayerMovement : MonoBehaviour
             Direction = movement.normalized;
         }
 
+        
+
         if (itemHolding)
         {
             moveSpeed = 5;
+            animator.SetFloat("Horizontal", movement.x);
+            animator.SetFloat("Vertical", movement.y);
+            animator.SetFloat("Speed", movement.sqrMagnitude);
         }
         else
         {

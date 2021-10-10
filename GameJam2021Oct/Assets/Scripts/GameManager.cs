@@ -12,9 +12,6 @@ public class GameManager : MonoBehaviour
 
     public float transitionTime = 1f;
 
-    
-
-
 
     public void EndGame()
     {

@@ -8,6 +8,7 @@ public class PresurePlate : MonoBehaviour
     [SerializeField] private GameObject door2GameObject;
     private DoorTrigger door1;
     private DoorTrigger door2;
+    public GameObject door;
     float timer;
     public float TimeOfTimer;
 
@@ -25,6 +26,7 @@ public class PresurePlate : MonoBehaviour
             if (timer <= 0f) {
                 door1.CloseDoor();
                 door2.CloseDoor();
+                door.SetActive(true);
             }
         }
     }
@@ -34,7 +36,12 @@ public class PresurePlate : MonoBehaviour
         if (other.gameObject.tag == "Player") {
             door1.OpenDoor();
             door2.OpenDoor();
-            
+            door.SetActive(false);
+
+        }
+
+        if (other.gameObject.tag == "Box") {
+            door.SetActive(false);
         }
     }
 
@@ -44,6 +51,10 @@ public class PresurePlate : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             timer = TimeOfTimer;
+        }
+        if (other.gameObject.tag == "Box")
+        {
+            door.SetActive(true);
         }
     }
 }

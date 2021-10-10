@@ -7,6 +7,19 @@ public class PlayerCollisions : MonoBehaviour
 {
     public int keys = 0;
     public float breakFloor = 2f;
+    public bool touch = false;
+
+    private void Update()
+    {
+
+        if (Input.GetKey(KeyCode.Space)) {
+            touch = true;
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            touch = false;
+        }
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -34,55 +47,83 @@ public class PlayerCollisions : MonoBehaviour
             Destroy(gameObject);
         }
 
-        // BreakingFloor
+        //Moving Platform
+
+        if (other.gameObject.tag == "MovingPlatform")
+        {
+            this.transform.parent = other.transform;
+        }
+
+        //BreakingFloor
         if (other.gameObject.tag == "BreakableFloor")
         {
-            Destroy(other.gameObject, breakFloor);
+            //Transform water = other.gameObject.transform.GetChild(0);
+            //water.GetComponent<BoxCollider2D>().enabled = false;
+            Debug.Log("Floor Collided");
+
+            StartCoroutine(ExecuteAfterTime(other, 2f));
+        }
+        // Enemy
+        if (other.gameObject.tag == "Enemy")
+        {
+            FindObjectOfType<GameManager>().EndGame();
+            Debug.Log("Water Collided");
+            Destroy(this.gameObject);
         }
     }
+
+
+    IEnumerator ExecuteAfterTime(Collider2D other, float time)
+    {
+        Transform water = other.gameObject.transform.GetChild(0);
+        Debug.Log("Water gotten");
+        yield return new WaitForSeconds(time);
+        other.GetComponent<SpriteRenderer>().enabled = false;
+        other.GetComponent<BoxCollider2D>().enabled = false;
+        water.GetComponent<BoxCollider2D>().enabled = true;
+        //Destroy(other.gameObject);
+    }
+
 
     private void OnCollisionEnter2D(Collision2D other)
     {
         // Enemy
         if (other.gameObject.tag == "Enemy")
         {
-            Destroy(other.gameObject);
+            FindObjectOfType<GameManager>().EndGame();
+            Destroy(this.gameObject);
         }
 
         if (other.gameObject.tag == "Box")
         {
-            // get the direction of the collision
-            Vector3 direction = transform.position - other.gameObject.transform.position;
-            // see if the obect is futher left/right or up down
-            Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
 
-            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-            {
-                if (direction.x > 0) 
-                {
-                    Debug.Log("collision is to the right"); 
-                    
-                }
-                else {
-                    Debug.Log("collision is to the left");
-                }
-            }
-            else
-            {
-                if (direction.y > 0) 
-                {
-                    Debug.Log("collision is up");
-                }
-                else
-                {
-                    Debug.Log("collision is down");
-                }
-            }
+            Debug.Log("Collided");
+            if(touch == true)
+            other.transform.parent = this.transform;
+        }
+        else if (other.gameObject.tag == "Box" && touch == false)
+        {
+            other.transform.parent = null;
+        }
+
+    }
+
+    private void OnTriggerExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "MovingPlatform")
+        {
+            this.transform.parent = null;
         }
     }
 
-
-
-
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Box")
+        {
+            Debug.Log("Not COllided");
+            
+            collision.transform.parent = null;
+        }
+    }
 
 }

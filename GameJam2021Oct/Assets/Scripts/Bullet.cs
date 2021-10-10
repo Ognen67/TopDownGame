@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
     }
 
     // Update is called once per frame
-    void OnTriggerEnter2D() { 
+    void OnCollisionEnter2D() { 
    
             Destroy(gameObject);
         

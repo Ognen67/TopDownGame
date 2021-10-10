@@ -18,7 +18,6 @@ public class Shooting : MonoBehaviour
     void Update()
     {
         Shoot();
-       
     }
     public void Shoot()
     {

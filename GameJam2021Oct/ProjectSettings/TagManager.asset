@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - BreakableFloor
   - Box
+  - MovingPlatform
+  - Cinemachine
   layers:
   - Default
   - TransparentFX

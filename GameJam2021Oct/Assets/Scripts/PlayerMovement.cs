@@ -9,8 +9,9 @@ public class PlayerMovement : MonoBehaviour
     // Basic Movement
     public float moveSpeed = 5f;
     public Rigidbody2D rb;
-    Vector2 movement;
+    public Vector2 movement;
     private Animator animator;
+    public GameObject light;
 
     public Transform holdSpot;
     public LayerMask pickUpMask;
@@ -47,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (itemHolding)
         {
-            moveSpeed = 5;
+            moveSpeed = 10f;
             animator.SetFloat("Horizontal", movement.x);
             animator.SetFloat("Vertical", movement.y);
             animator.SetFloat("Speed", movement.sqrMagnitude);
@@ -62,17 +63,20 @@ public class PlayerMovement : MonoBehaviour
         {
             if (itemHolding)
             {
+                
                 itemHolding.transform.position = transform.position + Direction;
                 itemHolding.transform.parent = null;
                 if (itemHolding.GetComponent<Rigidbody2D>())
                     itemHolding.GetComponent<Rigidbody2D>().simulated = true;
                 itemHolding = null;
+
             }
             else
             {
                 Collider2D pickUpItem = Physics2D.OverlapCircle(transform.position + Direction, float.PositiveInfinity, pickUpMask);
                 if (pickUpItem)
                 {
+                    light.SetActive(false);
                     itemHolding = pickUpItem.gameObject;
                     itemHolding.transform.position = holdSpot.position;
                     itemHolding.transform.parent = transform;
@@ -83,9 +87,10 @@ public class PlayerMovement : MonoBehaviour
         }
         if (itemHolding)
         {
+            
             if (Input.GetKey(KeyCode.Q))
             {
-                minThrowDistance += Time.deltaTime * (float)2.5;
+                minThrowDistance += Time.deltaTime * (float)4;
                 throwDistance = minThrowDistance;
                 if (minThrowDistance >= throwCap)
                 {
@@ -107,8 +112,8 @@ public class PlayerMovement : MonoBehaviour
         if (hitObstacle.collider != null)
         {
             Debug.DrawRay(obstacleRayObject.transform.position, Direction * hitObstacle.distance, Color.red);
-            Debug.Log("Wall Detected");
-            Debug.Log(hitObstacle.distance);
+            //Debug.Log("Wall Detected");
+            //Debug.Log(hitObstacle.distance);
             throwCap = hitObstacle.distance;
         }
         else
@@ -125,12 +130,13 @@ public class PlayerMovement : MonoBehaviour
 
     public void asd()
     {
-        Debug.Log("asd");
+        //Debug.Log("asd");
     }
 
 
     IEnumerator ThrowItem(GameObject item)
     {
+        light.SetActive(true);
         Vector3 startPoint = item.transform.position;
         Vector3 endPoint = transform.position + Direction * throwDistance;
         item.transform.parent = null;
